@@ -1,5 +1,6 @@
 package com.aryansa.rizqi.footballapps.view.fragment.matches.past
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.MenuItemCompat
@@ -8,8 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.view.*
-import android.widget.LinearLayout
-import android.widget.ProgressBar
+import android.widget.*
 import com.aryansa.rizqi.footballapps.R
 import com.aryansa.rizqi.footballapps.api.ApiRequest
 import com.aryansa.rizqi.footballapps.model.Event
@@ -22,6 +22,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
@@ -33,6 +34,8 @@ class PastMatchesFragment : Fragment(), PastView {
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var adapter: MatchesAdapter
     private lateinit var presenter: PastPresenter
+    private lateinit var spinner: Spinner
+    private lateinit var leagueName: String
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -55,6 +58,8 @@ class PastMatchesFragment : Fragment(), PastView {
                 topPadding = dip(8)
                 leftPadding = dip(16)
                 rightPadding = dip(16)
+
+                spinner = spinner()
 
                 swipeRefresh = swipeRefreshLayout {
                     id = R.id.swipeRefresh
@@ -90,6 +95,30 @@ class PastMatchesFragment : Fragment(), PastView {
     }
 
     private fun initAdapter() {
+
+        val spinnerItems = resources.getStringArray(R.array.league_event_array)
+        val spinnerAdapter = ArrayAdapter(ctx,
+                android.R.layout.simple_spinner_dropdown_item, spinnerItems)
+
+        spinner.adapter = spinnerAdapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                leagueName = spinner.selectedItem.toString()
+
+                if(leagueName == "Select League") {
+                    presenter.getEventList(getString(R.string.resource_eventspastleague))
+                } else {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                        leagueName = leagueName.replace(" ", "%20")
+                    }
+                    presenter.getEventListByLeague(leagueName)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
         adapter = MatchesAdapter(schedules)
         listSchedules.adapter = adapter

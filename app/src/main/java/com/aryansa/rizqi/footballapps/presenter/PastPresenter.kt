@@ -39,4 +39,17 @@ class PastPresenter (private val view: PastView,
             view.hideLoading()
         }
     }
+
+    fun getEventListByLeague(nameLeague: String?) {
+        view.showLoading()
+        async(context.main) {
+            val data = bg {
+                gson.fromJson(apiRequest.doRequest(TheSportDBApi.getListEventByLeague(nameLeague)),
+                        EventResponse::class.java
+                )
+            }
+            view.showEventList(data.await().searchEvent)
+            view.hideLoading()
+        }
+    }
 }

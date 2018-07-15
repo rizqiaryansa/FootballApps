@@ -62,4 +62,14 @@
         <item>Spanish La Liga</item>
     </array>
 
+    <array name="league_event_array">
+        <item>Select League</item>
+        <item>English Premier League</item>
+        <item>English League Championship</item>
+        <item>German Bundesliga</item>
+        <item>Italian Serie A</item>
+        <item>French Ligue 1</item>
+        <item>Spanish La Liga</item>
+    </array>
+
 </resources>

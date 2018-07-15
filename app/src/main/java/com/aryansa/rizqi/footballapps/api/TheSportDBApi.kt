@@ -11,6 +11,7 @@ object TheSportDBApi {
     private const val strLookUpPlayer = "lookup_all_players.php?id="
     private const val strLookUpDetailPlayer = "lookupplayer.php?id="
     private const val strListTeamByNameLeague = "search_all_teams.php?l="
+    private const val strListLeagueByName = "searchfilename.php?e="
     private const val strSearchEventByName = "searchevents.php?e="
     private const val strSearchTeamByName = "searchteams.php?t="
     private const val idLeague = ".php?id=4328"
@@ -49,6 +50,10 @@ object TheSportDBApi {
 
     fun getListPlayerTeam(nameTeam: String?) : String {
         return BuildConfig.BASE_URL + strLookUpPlayer + nameTeam
+    }
+
+    fun getListEventByLeague(nameLeague: String?) : String {
+        return BuildConfig.BASE_URL + strListLeagueByName + nameLeague
     }
 
     fun getDetailPlayerTeam(idPlayer: String?) : String {

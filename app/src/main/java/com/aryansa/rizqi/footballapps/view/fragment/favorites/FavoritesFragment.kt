@@ -62,7 +62,7 @@ class FavoritesFragment : Fragment() {
         val teams = FavoriteTeamsFragment.favoriteTeamsInstance()
         adapter?.addFragment(teams, getString(R.string.teams))
 
-        pager?.adapter = adapter
+        pager.adapter = adapter
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {

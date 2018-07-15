@@ -8,7 +8,7 @@ class SpaceItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoratio
     override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?,
                                 state: RecyclerView.State?) {
         if(outRect != null && parent != null) {
-            var position = parent.getChildAdapterPosition(view)
+            val position = parent.getChildAdapterPosition(view)
             outRect.left = spacing
             outRect.right = spacing
             outRect.bottom = spacing

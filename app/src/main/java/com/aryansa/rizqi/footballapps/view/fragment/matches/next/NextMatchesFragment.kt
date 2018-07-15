@@ -1,6 +1,7 @@
 package com.aryansa.rizqi.footballapps.view.fragment.matches.next
 
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.MenuItemCompat
@@ -22,6 +23,7 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.UI
+import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
@@ -33,6 +35,8 @@ class NextMatchesFragment : Fragment(), NextView {
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var adapter: MatchesAdapter
     private lateinit var presenter: NextPresenter
+    private lateinit var spinner: Spinner
+    private lateinit var leagueName: String
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -55,6 +59,8 @@ class NextMatchesFragment : Fragment(), NextView {
                 topPadding = dip(8)
                 leftPadding = dip(16)
                 rightPadding = dip(16)
+
+                spinner = spinner()
 
                 swipeRefresh = swipeRefreshLayout {
                     id = R.id.swipeRefresh
@@ -93,7 +99,29 @@ class NextMatchesFragment : Fragment(), NextView {
 
     private fun initAdapter() {
 
-        //recyclerview
+        val spinnerItems = resources.getStringArray(R.array.league_event_array)
+        val spinnerAdapter = ArrayAdapter(ctx,
+                android.R.layout.simple_spinner_dropdown_item, spinnerItems)
+
+        spinner.adapter = spinnerAdapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                leagueName = spinner.selectedItem.toString()
+                if(leagueName == "Select League") {
+                    presenter.getEventList(getString(R.string.resource_eventsnextleague))
+                } else {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                        leagueName = leagueName.replace(" ", "%20")
+                    }
+                    presenter.getEventListByLeague(leagueName)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
         adapter = MatchesAdapter(schedules)
         listSchedules.adapter = adapter
 

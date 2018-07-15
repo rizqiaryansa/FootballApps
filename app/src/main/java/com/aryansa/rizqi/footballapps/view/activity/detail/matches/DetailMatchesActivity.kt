@@ -79,7 +79,7 @@ class DetailMatchesActivity : AppCompatActivity(), DetailMatchesView {
         super.onCreate(savedInstanceState)
         DetailMatchesUI().setContentView(this)
 
-        supportActionBar?.setTitle(getString(match_detail))
+        supportActionBar?.title = getString(match_detail)
 
         if (intent.extras != null) {
             idEventDetail = intent.getStringExtra(getString(item_eventdetail_id))
